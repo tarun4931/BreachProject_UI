@@ -1,0 +1,7 @@
+{
+  "name": "BreachProject_UI",
+  "short_name": "BreachProject_UI",
+  "description": "Breach Application data",
+  "start_url": "/",
+  "display": "standalone"
+}

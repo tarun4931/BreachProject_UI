@@ -1,0 +1,25 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/main-app/main-app.js",
+  "sources": [
+    "src/*/*.*",
+    "package.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "node_modules/web-animations-js/web-animations-next-lite.min.js"
+  ],
+  "npm": true,
+  "builds": [
+    {
+      "name": "es5prod",
+      "preset": "es5-bundled"
+    }
+  ],
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  }
+}
