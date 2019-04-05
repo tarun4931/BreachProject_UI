@@ -15,6 +15,14 @@
     {
       "name": "es5prod",
       "preset": "es5-bundled"
+    },
+    {
+      "name": "es6prodBundled",
+      "preset": "es6-bundled"
+    },
+    {
+      "name": "es6prod",
+      "preset": "es6-unbundled"
     }
   ],
   "lint": {

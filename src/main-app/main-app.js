@@ -128,8 +128,7 @@ _pageChanged(currentPage, oldPage) {
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>
-                            App name
-                        </div>
+                            ING TRADE                        </div>
                     </app-toolbar>
                     </app-header>
                     <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
