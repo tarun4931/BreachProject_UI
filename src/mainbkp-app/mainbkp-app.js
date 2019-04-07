@@ -59,7 +59,7 @@ class MainApp extends PolymerElement {
                 import('../stocksbkp/placebkp-order.js');
                 break;
             case 'stocks':
-                import('../stocksbkp/stocksbkp-app.js');
+				import('../stocksbkp/stocksbkp-app.js');
                 break;
             default:
                 this.page = 'review';
@@ -144,9 +144,9 @@ class MainApp extends PolymerElement {
                     </<app-header-layout>        
                 </app-drawer>
                 <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
-                      <reviewbkp-order name="review" route="{{route}}"></review-order> 
-                      <placebkp-order name="buy" route="{{route}}"></place-order> 
-                      <allbkp-orders name="stocks" route="{{route}}"></all-orders> 
+                      <reviewbkp-order name="review" route="{{route}}"></reviewbkp-order> 
+                      <placebkp-order name="buy" route="{{route}}"></placebkp-order> 
+                      <stocksbkp-app name="stocks" route="{{route}}"></stocksbkp-app> 
                 </iron-pages>
             </app-drawer-layout>
        `;

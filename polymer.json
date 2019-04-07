@@ -3,6 +3,8 @@
   "shell": "src/main-app/main-app.js",
   "sources": [
     "src/*/*.*",
+	"images/*.*",
+	"index_bkp.html",
     "package.json"
   ],
   "extraDependencies": [
