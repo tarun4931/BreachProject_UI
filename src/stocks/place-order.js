@@ -15,10 +15,6 @@ class PlaceOrders extends PolymerElement{
             total:{
                 type: String
             },
-            baseURI:{
-                type: String,
-                value: baseUrl
-            },
             reqBody:{
                 type: Object
             }
@@ -46,7 +42,7 @@ class PlaceOrders extends PolymerElement{
             <app-route route="{{route}}" pattern="/:id" data="{{routeData}}"></app-route>
             <iron-ajax
                     id="ajax"
-                    url="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=[[stock.stock_name]]&apikey=CWIVW26D83LRESA9"
+                    url="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=[[stock.stockName]]&apikey=CWIVW26D83LRESA9"
                     method="get"
                     on-response="handleResponse"
                     on-error="handleError"
@@ -54,7 +50,7 @@ class PlaceOrders extends PolymerElement{
                     content-type="application/json"></iron-ajax>
             <iron-ajax
                     id="postStock"
-                    url="[[baseURI]]/orders"
+                    url="[[_getBuyUrl()]]"
                     method="POST"
                     body="[[reqBody]]"
                     on-response="buyStock"
@@ -63,13 +59,13 @@ class PlaceOrders extends PolymerElement{
                     content-type="application/json"></iron-ajax>
             <div class="main">
                 <div>
-                    Stock Name: [[stock.stock_name]]
+                    Stock Name: [[stock.stockName]]
                 </div>
                 <div>
                     <paper-input type="number" label="Quantity" placeholder="enter Quantity" value="{{stock.volume}}" min=1></paper-input>
                 </div>
                 <div>
-                    Total: [[__getTotalAmount(stock.volume, stock.stock_price)]]
+                    Total: [[__getTotalAmount(stock.volume, stock.stockPrice)]]
                 </div>
                 <div>
                     <paper-button raised on-click="placeOrder">Place Order</paper-button>
@@ -84,6 +80,9 @@ class PlaceOrders extends PolymerElement{
     }
     placeOrder(){
         this.$.ajax.generateRequest();
+    }
+    _getBuyUrl(){
+        return config.baseUrl + '/orders'
     }
     cancel(){
         this.$.dialog.close();
@@ -104,7 +103,7 @@ class PlaceOrders extends PolymerElement{
         console.log(this.stock);
         this.dispatchEvent(new CustomEvent('renderReview', {bubbles: true, composed: true, detail:{'call': true}}));
         let request = {
-            'stock': this.stock.stock_name,
+            'stock': this.stock.stockName,
             'stockPrice': this.total,
             'trade_time': this.stock.trade_time,
             'volume': this.stock.volume
@@ -114,7 +113,7 @@ class PlaceOrders extends PolymerElement{
     }
     buyStock(event){
         if(event.detail.response){
-            this.set('route.path', 'review');
+            this.set('route.path', '/review');
         }
     }
 }

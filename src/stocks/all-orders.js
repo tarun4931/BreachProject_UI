@@ -96,16 +96,12 @@ class AllOrders extends PolymerElement{
         console.log(event);
     }
     placeOrder(event){
-        console.log(this.allStocks[this.stockName].name);
-        console.log(this.qty);
-        // let stock = {'stock'};
         if(stock){
             this.dispatchEvent(new CustomEvent('stock', {bubbles:true, composed: true, detail:stock}));
             this.set('route.path', 'buy');
         }
     }
     handleStocks(event){
-        console.log(event.detail.response);
         if(event.detail.response){
             this.currentPrice = event.detail.response['Global Quote']['05. price'];
             this.price = this.currentPrice * this.qty;

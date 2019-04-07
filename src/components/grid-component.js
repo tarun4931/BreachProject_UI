@@ -99,8 +99,9 @@ class GridComponent extends PolymerElement{
                         [[oneHourStock]]
                       </div>
                       <div class="form-group">
-                      <button class="btn btn-primary" on-click="getAnalytics">ONe Day Stocks</button>
-                      <button class="btn btn-danger" on-click="getLastHour">last Stocks</button>
+                      <button class="btn btn-primary" on-click="getAnalytics">One Day Stocks</button>
+                      <button class="btn btn-danger" on-click="getLastHour">Last One Hour Stock</button>
+                      <button class="btn btn-success" on-click="buyStock">Buy stocks</button>
                       </div>
                     <div>
                     </vaadin-vertical-layout>
@@ -152,6 +153,7 @@ class GridComponent extends PolymerElement{
     this.set('route.path', '/analytics');
   }
   getLastHour(){
+    this.oneHourStock = '';
     this.$.hourAnalytics.generateRequest();    
   }
   _getLastHourUrl(stockName){
@@ -172,6 +174,16 @@ class GridComponent extends PolymerElement{
     }else{
       this.toastMessage = "Users are not available";
     }
+  }
+  buyStock(event){
+    let stock = {
+      "stockName":event.model.user.name,
+      "stockPrice":this.stockDetails.price,
+      "volume":1
+    }
+    this.dispatchEvent(new CustomEvent('stock', {bubbles:true, composed: true, detail:stock}));
+    this.set('route.path', '/buy');
+    
   }
   _getStockURL(stockName){
     return config.stockURL + "?function=GLOBAL_QUOTE&symbol="+ stockName +"&apikey=CWIVW26D83LRESA9";

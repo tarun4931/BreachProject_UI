@@ -6,6 +6,8 @@ import '@polymer/paper-spinner/paper-spinner.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '../components/orders-grid.js';
+import '@polymer/paper-toast/paper-toast.js';
+
 class ReviewOrders extends PolymerElement{
     connectedCallback(){
         super.connectedCallback();
@@ -22,10 +24,6 @@ class ReviewOrders extends PolymerElement{
                 type: Array,
                 value:[]   
             },
-            baseURI:{
-                type: String,
-                value: baseUrl
-            },
             loadingData:{
                 type: Boolean,
                 value: true
@@ -35,11 +33,11 @@ class ReviewOrders extends PolymerElement{
     static get template(){
         return html `
             <h1>Review Orders</h1>
-            <!-- <order-grid orders="[[orders]]" route="[[route]]"></order-grid> -->
+            <paper-toast id="toast" text="[[toastMessage]]" with-backdrop horizontal-align="center" vertical-align="middle"></paper-toast>
             <iron-ajax
                     auto
                     id="ajax"
-                    url="[[baseURI]]/orders"
+                    url="[[_getReviewURL()]]"
                     method="get"
                     on-response="handleResponse"
                     on-error="handleError"
@@ -100,9 +98,13 @@ class ReviewOrders extends PolymerElement{
         }
     }
     handleError(event){
-        // if(event){
-
-        // }
+        if(event){
+            this.toastMessage = "Unable to process the request";
+            this.$.toast.open();
+        }
+    }
+    _getReviewURL(){
+        return config.baseUrl + '/orders';
     }
     placeOrder(event){
         let stock = event.model.item;
