@@ -94,6 +94,14 @@ class GridComponent extends PolymerElement{
                         <label for="name">Last Traded Price: </label>
                         [[stockDetails.price]]
                       </div>
+                      <div class="form-group">
+                        <label for="name">Last OneHour Price: </label>
+                        [[oneHourStock]]
+                      </div>
+                      <div class="form-group">
+                      <button class="btn btn-primary" on-click="getAnalytics">ONe Day Stocks</button>
+                      <button class="btn btn-danger" on-click="getLastHour">last Stocks</button>
+                      </div>
                     <div>
                     </vaadin-vertical-layout>
                   </vaadin-accordion-panel>
@@ -128,7 +136,29 @@ class GridComponent extends PolymerElement{
         handle-as="json"
         loading="{{loadingData}}"
         content-type="application/json"></iron-ajax>
+      <iron-ajax
+        id="hourAnalytics"
+        url="[[_getLastHourUrl(stockName)]]"
+        method="[[method]]"
+        content-type="application/json"
+        on-response="handleAnalytics"
+        on-error="handleError"
+        handle-as="json"
+        loading="{{loadingData}}"
+        > </iron-ajax>
     `
+  }
+  getAnalytics(){
+    this.set('route.path', '/analytics');
+  }
+  getLastHour(){
+    this.$.hourAnalytics.generateRequest();    
+  }
+  _getLastHourUrl(stockName){
+    return config.baseUrl + '/hourstocks/' + stockName;
+  }
+  handleAnalytics(event){
+    this.oneHourStock = event.detail.response.volume;
   }
   handleResponse(event){
     if(event.detail.response.length>0){
@@ -153,16 +183,23 @@ class GridComponent extends PolymerElement{
     }
   }
   handleStocks(event){
-    console.log(event.detail.response['Global Quote']);
     if(event.detail.response){
       let stock = event.detail.response['Global Quote'];
-      this.stockDetails = {
-        "name": stock["01. symbol"],
-        "open": stock["02. open"],
-        "high": stock["03. high"],
-        "low": stock["04. low"],
-        "price": stock["05. price"]
+      try{
+        this.stockDetails = {
+          "name": stock["01. symbol"],
+          "open": stock["02. open"],
+          "high": stock["03. high"],
+          "low": stock["04. low"],
+          "price": stock["05. price"]
+        }
       }
+      catch(e){
+        this.set('stockDetails',{});
+        this.toastMessage = "Unable to process the request";
+        this.$.toast.open();
+      }
+      
     }
   }
   getDetails(event){

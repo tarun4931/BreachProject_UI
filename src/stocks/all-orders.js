@@ -60,7 +60,7 @@ class AllOrders extends PolymerElement{
                     margin-left: 10px;
                 }
             </style>
-            <grid-component url="[[url]]" method="[[method]]" pagination="[[pagination]]"></grid-component>
+            <grid-component url="[[url]]" method="[[method]]" route="{{route}}" pagination="[[pagination]]"></grid-component>
             
             <div class="">
                 <!-- <div>

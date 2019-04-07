@@ -57,19 +57,19 @@ class ReviewOrders extends PolymerElement{
                 <vaadin-grid-column>
                     <template class="header">Name</template>
                     <template>
-                        [[item.stock_name]]
+                        [[item.stockName]]
                     </template>
                 </vaadin-grid-column>
                 <vaadin-grid-column>
                     <template class="header">Price</template>
                     <template>
-                        [[item.stock_price]]
+                        [[item.stockPrice]]
                     </template>
                 </vaadin-grid-column>
                 <vaadin-grid-column>
                     <template class="header">Trade Time</template>
                     <template>
-                        [[item.trade_time]]
+                        [[item.tradeTime]]
                     </template>
                 </vaadin-grid-column>
                 <vaadin-grid-column>

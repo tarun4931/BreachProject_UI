@@ -51,6 +51,9 @@ _pageChanged(currentPage, oldPage) {
         case 'stocks':
             import('../stocks/all-orders.js');
             break;
+        case 'analytics':
+            import('../analytics/analytics.js');
+            break;
         default:
             this.page = 'stocks';
     }
@@ -116,10 +119,6 @@ _pageChanged(currentPage, oldPage) {
                                 <li>
                                     <a href="#/review"> Review Orders </a>
                                 </li>
-                                <li>
-                                    <a href="#/buy"> Buy Stocks </a>
-                                </li>
-                               
                         </ul>
                     </div>          
                 </app-drawer>
@@ -135,7 +134,8 @@ _pageChanged(currentPage, oldPage) {
                     <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
                       <review-order name="review" route="{{route}}"></review-order> 
                       <place-order name="buy" stock="[[stockData]]" route="{{route}}"></place-order> 
-                      <all-orders name="stocks" route="{{route}}"></all-orders> 
+                      <all-orders name="stocks" route="{{route}}"></all-orders>
+                      <analytic-data name="analytics"></analytic-data>
                     </iron-pages>
                 </app-header-layout>
             </app-drawer-layout>
