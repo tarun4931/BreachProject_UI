@@ -77,7 +77,7 @@ _pageChanged(currentPage, oldPage) {
         background-color: #eee;
       }
       app-toolbar {
-        background-color: #4285f4;
+        background-color: #ff6200;
         color: #fff;
       }
       app-drawer-layout:not([narrow]) [drawer-toggle] {
@@ -127,7 +127,7 @@ _pageChanged(currentPage, oldPage) {
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>
-                            ING TRADE  
+                            ING TRADER  
                         </div>
                     </app-toolbar>
                     </app-header>

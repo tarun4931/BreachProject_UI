@@ -15,6 +15,7 @@ import '../components/grid-component.js';
 class AllOrders extends PolymerElement{
     constructor(){
         super();
+        this.limit = 5;
         this.url = config.baseUrl + '/stocks';
         this.method = "GET";
         this.pagination = false;
@@ -60,7 +61,7 @@ class AllOrders extends PolymerElement{
                     margin-left: 10px;
                 }
             </style>
-            <grid-component url="[[url]]" method="[[method]]" route="{{route}}" pagination="[[pagination]]"></grid-component>
+            <grid-component limit="[[limit]]" url="[[url]]" method="[[method]]" route="{{route}}" pagination="[[pagination]]"></grid-component>
             
             <div class="">
                 <!-- <div>

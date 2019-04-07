@@ -103,7 +103,7 @@ class PlaceOrders extends PolymerElement{
         console.log(this.stock);
         this.dispatchEvent(new CustomEvent('renderReview', {bubbles: true, composed: true, detail:{'call': true}}));
         let request = {
-            'stock': this.stock.stockName,
+            'stockName': this.stock.stockName,
             'stockPrice': this.total,
             'trade_time': this.stock.trade_time,
             'volume': this.stock.volume
