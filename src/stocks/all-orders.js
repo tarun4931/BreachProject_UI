@@ -10,8 +10,15 @@ import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-input/paper-input.js';
+import '../components/grid-component.js';
 
 class AllOrders extends PolymerElement{
+    constructor(){
+        super();
+        this.url = this.baseURI + '/stocks';
+        this.method = "GET";
+        this.pagination = false;
+    }
     static get properties(){
         return {
             allStocks:{
@@ -58,8 +65,7 @@ class AllOrders extends PolymerElement{
                     margin-left: 10px;
                 }
             </style>
-            <h1>All Orders</h1>
-    
+            <grid-component url="[[url]]" method="[[method]]" pagination="[[pagination]]"></grid-component>
             <iron-ajax
                     auto
                     url="[[baseURI]]/stocks"
@@ -80,8 +86,8 @@ class AllOrders extends PolymerElement{
                     content-type="application/json"></iron-ajax>
            
             <paper-spinner active="{{loadingData}}"></paper-spinner>
-            <div class="main">
-                <div>
+            <div class="">
+                <!-- <div>
                     <paper-dropdown-menu label="Choose Stock">
                         <paper-listbox slot="dropdown-content" class="dropdown-content" attr-selected-for="name" selected="{{stockName}}">
                             <template is="dom-repeat" items="[[allStocks]]">
@@ -99,7 +105,7 @@ class AllOrders extends PolymerElement{
                 <div>
                     <paper-button raised on-click="placeOrder">Buy</paper-button>
                 </div>
-            </div>
+            </div> -->
         `;
     }
     calcPrice(newVal, oldVal){

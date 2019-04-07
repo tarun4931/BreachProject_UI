@@ -37,7 +37,7 @@ static get observers() {
 }
 
 _routeChanged(page) {
-    this.page = page || 'review';
+    this.page = page || 'stocks';
 }
 
 _pageChanged(currentPage, oldPage) {
@@ -52,7 +52,7 @@ _pageChanged(currentPage, oldPage) {
             import('../stocks/all-orders.js');
             break;
         default:
-            this.page = 'review';
+            this.page = 'stocks';
     }
 }
   static get template() {
@@ -103,7 +103,7 @@ _pageChanged(currentPage, oldPage) {
 
     </style>
   </custom-style>
-    <app-location route="{{route}}"></app-location>
+    <app-location use-hash-as-path route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
             <app-drawer-layout>
                 <app-drawer slot="drawer">
@@ -111,13 +111,13 @@ _pageChanged(currentPage, oldPage) {
                     <div class="drawer-contents">
                         <ul>
                                 <li>
-                                  <a href="/stocks"> All Stocks </a>
+                                  <a href="#/stocks"> All Stocks </a>
                                 </li>        
                                 <li>
-                                    <a href="/review"> Review Orders </a>
+                                    <a href="#/review"> Review Orders </a>
                                 </li>
                                 <li>
-                                    <a href="/buy"> Buy Stocks </a>
+                                    <a href="#/buy"> Buy Stocks </a>
                                 </li>
                                
                         </ul>
@@ -128,7 +128,8 @@ _pageChanged(currentPage, oldPage) {
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>
-                            ING TRADE                        </div>
+                            ING TRADE  
+                        </div>
                     </app-toolbar>
                     </app-header>
                     <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">

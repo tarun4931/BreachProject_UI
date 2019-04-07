@@ -14,12 +14,14 @@
     <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
     <script type="module" src="./src/main-app/main-app.js" crossorigin></script>
+    <script src="./config.js"></script>
   </head>
   <body>
     <main-app></main-app>
     <script>
-      // window.baseUrl = "http://localhost:3000"
-      window.baseUrl = "http://52.66.190.246:8085"
+      window.baseUrl = "http://localhost:3000";
+      console.log(config);
+      // window.baseUrl = "http://52.66.201.185:8085"
     </script>
   </body>
 </html>
