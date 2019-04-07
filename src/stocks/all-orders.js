@@ -15,7 +15,7 @@ import '../components/grid-component.js';
 class AllOrders extends PolymerElement{
     constructor(){
         super();
-        this.url = this.baseURI + '/stocks';
+        this.url = config.baseUrl + '/stocks';
         this.method = "GET";
         this.pagination = false;
     }
@@ -24,10 +24,6 @@ class AllOrders extends PolymerElement{
             allStocks:{
                 type: Array,
                 value: []
-            },
-            baseURI:{
-                type:String,
-                value: baseUrl
             },
             stockName:{
                 type: Number,
@@ -65,25 +61,7 @@ class AllOrders extends PolymerElement{
                 }
             </style>
             <grid-component url="[[url]]" method="[[method]]" pagination="[[pagination]]"></grid-component>
-            <!-- <iron-ajax
-                    auto
-                    url="[[baseURI]]/stocks"
-                    method="get"
-                    on-response="handleResponse"
-                    on-error="handleError"
-                    handle-as="json"
-                    loading="{{loadingData}}"
-                    content-type="application/json"></iron-ajax> -->
-            <!-- <iron-ajax
-                    id="ajax"
-                    url="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=[[getStocks(stockName)]]&apikey=CWIVW26D83LRESA9"
-                    method="get"
-                    on-response="handleStocks"
-                    on-error="handleError"
-                    handle-as="json"
-                    loading="{{loadingData}}"
-                    content-type="application/json"></iron-ajax> -->
-           
+            
             <div class="">
                 <!-- <div>
                     <paper-dropdown-menu label="Choose Stock">
