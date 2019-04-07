@@ -46,7 +46,6 @@ class AllOrders extends PolymerElement{
     }
     
     getStockName(newVal, oldVal){
-        console.log(this.allStocks);
         this.$.ajax.generateRequest();
     }
     
@@ -66,7 +65,7 @@ class AllOrders extends PolymerElement{
                 }
             </style>
             <grid-component url="[[url]]" method="[[method]]" pagination="[[pagination]]"></grid-component>
-            <iron-ajax
+            <!-- <iron-ajax
                     auto
                     url="[[baseURI]]/stocks"
                     method="get"
@@ -74,8 +73,8 @@ class AllOrders extends PolymerElement{
                     on-error="handleError"
                     handle-as="json"
                     loading="{{loadingData}}"
-                    content-type="application/json"></iron-ajax>
-            <iron-ajax
+                    content-type="application/json"></iron-ajax> -->
+            <!-- <iron-ajax
                     id="ajax"
                     url="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=[[getStocks(stockName)]]&apikey=CWIVW26D83LRESA9"
                     method="get"
@@ -83,9 +82,8 @@ class AllOrders extends PolymerElement{
                     on-error="handleError"
                     handle-as="json"
                     loading="{{loadingData}}"
-                    content-type="application/json"></iron-ajax>
+                    content-type="application/json"></iron-ajax> -->
            
-            <paper-spinner active="{{loadingData}}"></paper-spinner>
             <div class="">
                 <!-- <div>
                     <paper-dropdown-menu label="Choose Stock">
