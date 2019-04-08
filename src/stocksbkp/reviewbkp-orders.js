@@ -14,10 +14,6 @@ class ReviewOrdersBkp extends PolymerElement {
                 type: Array,
                 value: []
             },
-            baseURI: {
-                type: String,
-                value: 'http://52.66.201.185:8085'
-            },
 			route: {
 				type: Object,
 				reflectToAttribute: true,
@@ -31,6 +27,10 @@ class ReviewOrdersBkp extends PolymerElement {
         }
     }
 	
+    _getReviewsURL() {
+    	return config.baseUrl+"/orders"; 
+    }
+    
     placeOrder(event,elem) {
 		var selectedOrder = this.orders.filter((e)=>{return e.id==event.target.id});
 		console.log(selectedOrder[0]);
@@ -48,7 +48,7 @@ class ReviewOrdersBkp extends PolymerElement {
             <iron-ajax
                     id="dataAjax"
                     auto
-                    url="[[baseURI]]/orders"
+                    url="[[_getReviewsURL()]]"
                     method="get"
                     on-response="handleResponse"
                     on-error="handleError"

@@ -28,10 +28,6 @@ class StocksBkp extends PolymerElement{
 	      stockDetails:{
 	        type: Object,
 	        value: {}
-	      },
-	      stockURL : {
-	    	  type: String,
-	    	  value: ""
 	      }
 	    }
 	  }
@@ -66,7 +62,9 @@ class StocksBkp extends PolymerElement{
 	      }	      
 	    }
 	}
-	
+	_getStocksURL() {
+		return config.baseUrl+"/stocks";
+	}
     static get template(){
         return html `
         ${sharedStyle}
