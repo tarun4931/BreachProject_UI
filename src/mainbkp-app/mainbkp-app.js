@@ -140,12 +140,12 @@ class MainApp extends PolymerElement {
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-toolbar>
             <paper-icon-button on-click="_toggleDrawer" icon="menu"></paper-icon-button>
-             <div main-title>ING Demo</div>
+             <div main-title>ING Trader</div>
         </app-toolbar>
 			<app-drawer-layout has-scrolling-region responsive-width="940px">
                 <app-drawer swipe-open slot="drawer">
                     <app-header-layout has-scrolling-region>
-                        <iron-image style="display:none;" sizing="cover" preload src="../images/ING Logo.png"></iron-image>
+                        <iron-image sizing="cover" preload src="../images/ING Logo.png"></iron-image>
                         <paper-listbox>
         					<paper-item on-tap="getAllStocks">
                                     <a href="/stocks" name="name">Stocks</a>
