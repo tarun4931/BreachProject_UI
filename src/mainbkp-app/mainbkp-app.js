@@ -16,6 +16,7 @@ import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import {scroll} from '@polymer/app-layout/helpers/helpers.js';
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 import '@polymer/iron-image/iron-image.js';
+import '@polymer/iron-ajax/iron-ajax.js';
 
 /**
  * @customElement
@@ -24,20 +25,22 @@ import '@polymer/iron-image/iron-image.js';
 class MainApp extends PolymerElement {
     ready() {
         super.ready();
-        document.addEventListener('stock', (data) => {
-            this.stockData = data.detail;
-        })
     }
     static get properties() {
         return {
+        	baseURI : {
+        		type: String,
+                value: 'http://52.66.201.185:8085'
+        	},
             page: {
                 type: String,
                 reflectToAttribute: true,
                 observer: '_pageChanged'
             },
-            stockData: {
-                type: Object
-            }
+	  	    allStocks:{
+	  	        type: Array,
+	  	        value:[]
+	  	    }
         }
     }
 
@@ -50,22 +53,35 @@ class MainApp extends PolymerElement {
     }
 	
 	_pageChanged(currentPage, oldPage) {
-		console.log(currentPage);
-        switch (currentPage) {
+		switch (currentPage) {
             case 'review':
                 import('../stocksbkp/reviewbkp-orders.js');
                 break;
             case 'buy':
-                import('../stocksbkp/placebkp-order.js');
+            	import('../stocksbkp/placebkp-order.js');
                 break;
             case 'stocks':
 				import('../stocksbkp/stocksbkp-app.js');
+                break;
+            case 'dayanalytics':
+            	import('../analyticsbkp/analyticsbkp.js');
                 break;
             default:
                 this.page = 'review';
         }
     }
 
+	getAllStocks(){
+		this.$.ajax.generateRequest();
+	}
+	
+	handleStocksResponse(event) {
+		if(event.detail.response.length>0){
+			this.allStocks = event.detail.response;
+			this.set('route.allStocks',this.allStocks)
+		}
+	}
+	
     _toggleDrawer() {
         var drawer = this.shadowRoot.querySelector('app-drawer');
         drawer.toggle();
@@ -131,7 +147,7 @@ class MainApp extends PolymerElement {
                     <app-header-layout has-scrolling-region>
                         <iron-image style="display:none;" sizing="cover" preload src="../images/ING Logo.png"></iron-image>
                         <paper-listbox>
-        					<paper-item>
+        					<paper-item on-tap="getAllStocks">
                                     <a href="/stocks" name="name">Stocks</a>
                             </paper-item>
                             <paper-item>
@@ -140,15 +156,28 @@ class MainApp extends PolymerElement {
                             <paper-item>
                                     <a href="/buy" name="name">Place Order</a>
                             </paper-item>
+                            <paper-item>
+                                    <a href="/dayanalytics" name="name">Day History</a>
+                            </paper-item>
                         </paper-listbox>
                     </<app-header-layout>        
                 </app-drawer>
                 <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
                       <reviewbkp-order name="review" route="{{route}}"></reviewbkp-order> 
                       <placebkp-order name="buy" route="{{route}}"></placebkp-order> 
-                      <stocksbkp-app name="stocks" route="{{route}}"></stocksbkp-app> 
+                      <stocksbkp-app name="stocks" allStocks="[[allStocks]]" route="{{route}}"></stocksbkp-app> 
+                      <analyticsbkp-app name="dayanalytics"></analyticsbkp-app>
                 </iron-pages>
             </app-drawer-layout>
+            <iron-ajax
+            	auto
+            	id="ajax"
+                url="[[baseURI]]/stocks"
+            	method="[[method]]"
+            	content-type="application/json"
+            	on-response="handleStocksResponse"
+            	on-error="handleError"
+            	handle-as="json"></iron-ajax>
        `;
     }
 }
