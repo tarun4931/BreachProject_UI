@@ -8,6 +8,10 @@ import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-image/iron-image.js';
+import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/iron-icons/iron-icons.js';
+
 /**
  * @customElement
  * @polymer
@@ -28,7 +32,11 @@ class MainApp extends PolymerElement {
         },
         stockData:{
           type: Object
-        }
+        },
+		allStocks:{
+	  	    type: Array,
+	  	    value:[]
+	  	}
     }
 }
 
@@ -37,7 +45,7 @@ static get observers() {
 }
 
 _routeChanged(page) {
-    this.page = page || 'stocks';
+	this.page = page || 'stocks';
 }
 
 _pageChanged(currentPage, oldPage) {
@@ -54,91 +62,145 @@ _pageChanged(currentPage, oldPage) {
         case 'analytics':
             import('../analytics/analytics.js');
             break;
+		case 'reviewbkp':
+            import('../stocksbkp/reviewbkp-orders.js');
+            break;
+        case 'buybkp':
+           	import('../stocksbkp/placebkp-order.js');
+            break;
+        case 'stocksbkp':
+			import('../stocksbkp/stocksbkp-app.js');
+            break;
+        case 'dayanalyticsbkp':
+          	import('../analyticsbkp/analyticsbkp.js');
+            break;
         default:
             this.page = 'stocks';
     }
-}
+  }	
+	_getStocksURL(){
+	    console.log(config.baseUrl + "/stocks");
+		return config.baseUrl + "/stocks";
+	}
+	
+	getAllStocks(){
+		this.$.ajax.generateRequest();
+	}
+	
+	handleStocksResponse(event) {
+		if(event.detail.response.length>0){
+			this.allStocks = event.detail.response;
+			this.set('route.allStocks',this.allStocks)
+		}
+	}
+	
+    _toggleDrawer() {
+        var drawer = this.shadowRoot.querySelector('app-drawer');
+        drawer.toggle();
+    }
+
   static get template() {
     return html`
-    <custom-style>
-    <style is="custom-style">
-      html {
-        --app-drawer-width: 350px;
-      }
-      :host, .paper-item {
-        display: block;
-        position: relative;
-        min-height: var(--paper-item-min-height, 48px);
-        padding: 0px 16px;
-      }
-      body {
-        margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
-        background-color: #eee;
-      }
-      app-toolbar {
-        background-color: #ff6200;
-        color: #fff;
-      }
-      app-drawer-layout:not([narrow]) [drawer-toggle] {
-        display: none;
-      }
-      app-drawer {
-        --app-drawer-content-container: {
-          background-color: #B0BEC5;
-        }
-      }
-      .drawer-contents {
-        height: 100%;
-        overflow-y: auto;
-      }
-      ul{
-          list-style-type: none;
-      }
-      li{
-          padding-top: 12px;
-      }
-      
-      a{
-          text-decoration: none;
-          font-size: x-large;
-      }
-
-    </style>
-  </custom-style>
+    <style>
+                :host {
+					--paper-font-common-base: {
+						font-family: Raleway, sans-serif;
+					};
+                }
+                iron-image {
+                    width: 153px;
+                    height: 153px;
+                    margin-left: 23%;
+                }
+                paper-item {
+					height: 54px;
+                }
+                paper-item > a {
+					width: 100%;
+					height: 100%;
+					line-height: 54px;
+					text-align: center;
+					text-decoration: none;
+					color: black;
+                }
+                paper-icon-button {
+                    color: white;
+                }
+				app-toolbar {
+						background-color: #ff6200;
+						color: black;
+				} 
+					paper-progress {
+						display: block;
+						width: 100%;
+						--paper-progress-active-color: rgba(255, 255, 255, 0.5);
+						--paper-progress-container-color: transparent;
+					}
+					app-header {
+						@apply(--layout-fixed-top);
+						color: #ff6200;
+						--app-header-background-rear-layer: {
+							background-color: green;
+						};
+                    }
+                    paper-icon-button + [main-title] {
+                        margin-left: 23%;
+                        font-family:var(--lumo-font-family);
+                        color:white;
+                    }
+		</style>
     <app-location use-hash-as-path route="{{route}}"></app-location>
-    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    <app-toolbar>
+            <paper-icon-button on-click="_toggleDrawer" icon="menu"></paper-icon-button>
+             <div main-title>ING Trader</div>
+    </app-toolbar>
+	<app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
             <app-drawer-layout>
-                <app-drawer slot="drawer">
-            
-                    <div class="drawer-contents">
-                        <ul>
-                                <li>
+               <app-drawer swipe-open slot="drawer">
+                    <app-header-layout has-scrolling-region>
+                        <iron-image sizing="cover" preload src="./images/ING Logo.png"></iron-image>
+                        <paper-listbox>
+                            <paper-item on-tap="getAllStocks">
                                   <a href="#/stocks"> All Stocks </a>
-                                </li>        
-                                <li>
-                                    <a href="#/review"> Review Orders </a>
-                                </li>
-                        </ul>
-                    </div>          
+                            </paper-item>
+                            <paper-item on-tap="getAllStocks">
+                                  <a href="#/review"> Review Orders </a>
+                            </paper-item>
+        					<paper-item on-tap="getAllStocks">
+                                    <a href="#/stocksbkp" name="name">Stocks</a>
+                            </paper-item>
+                            <paper-item>
+                                   <a href="#/reviewbkp" name="name">Review Orders</a>
+                            </paper-item>
+                            <paper-item>
+                                    <a href="#/buybkp" name="name">Place Order</a>
+                            </paper-item>
+                            <paper-item>
+                                    <a href="#/dayanalyticsbkp" name="name">Day History</a>
+                            </paper-item>
+                        </paper-listbox>
+                    </app-header-layout>        
                 </app-drawer>
-                <app-header-layout>
-                    <app-header slot="header">
-                    <app-toolbar>
-                        <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-                        <div main-title>
-                            ING TRADER  
-                        </div>
-                    </app-toolbar>
-                    </app-header>
                     <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
                       <review-order name="review" route="{{route}}"></review-order> 
                       <place-order name="buy" stock="[[stockData]]" route="{{route}}"></place-order> 
                       <all-orders name="stocks" route="{{route}}"></all-orders>
                       <analytic-data name="analytics"></analytic-data>
+					  <reviewbkp-order name="reviewbkp" route="{{route}}"></reviewbkp-order> 
+                      <placebkp-order name="buybkp" route="{{route}}"></placebkp-order> 
+                      <stocksbkp-app name="stocksbkp" allStocks="[[allStocks]]" route="{{route}}"></stocksbkp-app> 
+                      <analyticsbkp-app name="dayanalyticsbkp"></analyticsbkp-app>
                     </iron-pages>
-                </app-header-layout>
             </app-drawer-layout>
+			<iron-ajax
+            	auto
+            	id="ajax"
+                url="[[_getStocksURL()]]"
+            	method="[[method]]"
+            	content-type="application/json"
+            	on-response="handleStocksResponse"
+            	on-error="handleError"
+            	handle-as="json"></iron-ajax>
     `;
   }
 }
