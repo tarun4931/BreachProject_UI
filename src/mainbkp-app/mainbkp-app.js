@@ -28,11 +28,7 @@ class MainApp extends PolymerElement {
     }
     static get properties() {
         return {
-        	baseURI : {
-        		type: String,
-                value: 'http://52.66.201.185:8085'
-        	},
-            page: {
+        	page: {
                 type: String,
                 reflectToAttribute: true,
                 observer: '_pageChanged'
@@ -54,16 +50,16 @@ class MainApp extends PolymerElement {
 	
 	_pageChanged(currentPage, oldPage) {
 		switch (currentPage) {
-            case 'review':
+            case 'reviewbkp':
                 import('../stocksbkp/reviewbkp-orders.js');
                 break;
-            case 'buy':
+            case 'buybkp':
             	import('../stocksbkp/placebkp-order.js');
                 break;
-            case 'stocks':
+            case 'stocksbkp':
 				import('../stocksbkp/stocksbkp-app.js');
                 break;
-            case 'dayanalytics':
+            case 'dayanalyticsbkp':
             	import('../analyticsbkp/analyticsbkp.js');
                 break;
             default:
@@ -71,6 +67,11 @@ class MainApp extends PolymerElement {
         }
     }
 
+	_getStocksURL(){
+	    console.log(config.baseUrl + "/stocks");
+		return config.baseUrl + "/stocks";
+	}
+	
 	getAllStocks(){
 		this.$.ajax.generateRequest();
 	}
@@ -147,32 +148,35 @@ class MainApp extends PolymerElement {
                     <app-header-layout has-scrolling-region>
                         <iron-image sizing="cover" preload src="../images/ING Logo.png"></iron-image>
                         <paper-listbox>
+						     <paper-item on-tap="getAllStocks">
+                                  <a href="#/stocks"> All Stocks </a>
+                            </paper-item>
         					<paper-item on-tap="getAllStocks">
-                                    <a href="/stocks" name="name">Stocks</a>
+                                  <a href="#/review"> Review Orders </a>
                             </paper-item>
                             <paper-item>
-                                   <a href="/review" name="name">Review Orders</a>
+                                   <a href="/reviewbkp" name="name">Review Orders</a>
                             </paper-item>
                             <paper-item>
-                                    <a href="/buy" name="name">Place Order</a>
+                                    <a href="/buybkp" name="name">Place Order</a>
                             </paper-item>
                             <paper-item>
-                                    <a href="/dayanalytics" name="name">Day History</a>
+                                    <a href="/dayanalyticsbkp" name="name">Day History</a>
                             </paper-item>
                         </paper-listbox>
                     </<app-header-layout>        
                 </app-drawer>
                 <iron-pages selected="[[page]]" attr-for-selected="name" selected-attribute="visible" fallback-selection="404">
-                      <reviewbkp-order name="review" route="{{route}}"></reviewbkp-order> 
-                      <placebkp-order name="buy" route="{{route}}"></placebkp-order> 
-                      <stocksbkp-app name="stocks" allStocks="[[allStocks]]" route="{{route}}"></stocksbkp-app> 
-                      <analyticsbkp-app name="dayanalytics"></analyticsbkp-app>
+                      <reviewbkp-order name="reviewbkp" route="{{route}}"></reviewbkp-order> 
+                      <placebkp-order name="buybkp" route="{{route}}"></placebkp-order> 
+                      <stocksbkp-app name="stocksbkp" allStocks="[[allStocks]]" route="{{route}}"></stocksbkp-app> 
+                      <analyticsbkp-app name="dayanalyticsbkp"></analyticsbkp-app>
                 </iron-pages>
             </app-drawer-layout>
             <iron-ajax
             	auto
             	id="ajax"
-                url="[[baseURI]]/stocks"
+                url="[[_getStocksURL()]]"
             	method="[[method]]"
             	content-type="application/json"
             	on-response="handleStocksResponse"
