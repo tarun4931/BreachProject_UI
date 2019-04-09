@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '../shared-style/shared-style.js';
+import { sharedStyle } from '../shared-style/shared-style.js';
 
 class AnalyticData extends PolymerElement{
     static get properties(){
@@ -15,6 +16,7 @@ class AnalyticData extends PolymerElement{
     }
     static get template() {
         return html`
+        ${sharedStyle}
         <style>
             .bar {
                 fill: steelblue;

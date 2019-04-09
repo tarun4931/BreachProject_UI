@@ -9,7 +9,9 @@ import '@vaadin/vaadin-accordion/vaadin-accordion.js';
 import '@polymer/paper-toast/paper-toast.js';
 
 class StocksBkp extends PolymerElement{
-	
+	connectedCallback(){
+        super.connectedCallback();
+    }
 	static get properties(){
 	    return {
           allStocks:{
@@ -31,9 +33,10 @@ class StocksBkp extends PolymerElement{
 	      }
 	    }
 	  }
-	
+	getAnalytics() {
+		this.set('route.path', '/dayanalyticsbkp');
+	}
 	getStockDetails(event) {
-		this.stockDetails = {};
 		this.stockDetails.name = event.target.innerText;
 		this._getStockURL();
 		this.$.ajax.generateRequest();
@@ -43,6 +46,18 @@ class StocksBkp extends PolymerElement{
 	    this.stockURL = config.stockURL + "/query?function=GLOBAL_QUOTE&symbol="+ this.stockDetails.name +"&apikey=CWIVW26D83LRESA9";
 	}
 	
+	getLastHour(){
+	    this.oneHourStock = '';
+	    this.$.hourAnalytics.url = this._getLastHourUrl(this.stockDetails.name);
+	    this.$.hourAnalytics.generateRequest();    
+	}
+	handleError(event){
+	    
+	}
+	_getLastHourUrl(stockName){
+		return config.baseUrl + '/hourstocks/' + stockName;
+	}
+
 	handleStock(event){
 	    if(event.detail.response){
 	      let stock = event.detail.response['Global Quote'];
@@ -65,15 +80,26 @@ class StocksBkp extends PolymerElement{
 	_getStocksURL() {
 		return config.baseUrl+"/stocks";
 	}
+	handleAnalytics(event){
+	    this.oneHourStock = event.detail.response.volume;
+	}
+	_isLastHourExists(lastHour) {
+		(lastHour && lastHour!='') ? true : false;
+	}
     static get template(){
         return html `
         ${sharedStyle}
         <style>
+        	  .summary {
+        	  	font-size:23px;
+        	  }
+        	  .btn {
+        	  	background: #ff6200 !important;
+        		border: #ff6200 !important;
+        		font-family: sans-serif;
+        	  }
         	  :host{
           		color: var(--myColor);
-		       }
-		       .btn {
-		       		font-family: sans-serif;
 		       }
 		        .main{
 		          border: 2px solid #eee;
@@ -81,12 +107,16 @@ class StocksBkp extends PolymerElement{
 		      	.main div{
 		          margin-left: 10px;
 		      	}
+		      	.form-group {
+		      		font-family: sans-serif;
+		      		padding-top: 5px;
+		      	}
       </style>
-      <paper-toast id="toast" text="[[toastMessage]]" with-backdrop horizontal-align="center" vertical-align="middle"></paper-toast>
+      <paper-toast onload="getStock()" id="toast" text="[[toastMessage]]" with-backdrop horizontal-align="center" vertical-align="middle"></paper-toast>
       <vaadin-accordion>
             <template id="domRepeat" is="dom-repeat" items="[[route.allStocks]]" as="stock">
                   <vaadin-accordion-panel>
-                    <div slot="summary" id="[[stock.name]]" on-tap="getStockDetails">[[stock.name]]</div>
+                    <div class="summary" slot="summary" id="[[stock.name]]" on-tap="getStockDetails">[[stock.name]]</div>
                     <vaadin-vertical-layout>
                     <div class="col-sm-12 main">
                       <div class="form-group">
@@ -109,14 +139,16 @@ class StocksBkp extends PolymerElement{
                         <label for="name">Last Traded Price: </label>
                         [[stockDetails.price]]
                       </div>
+                      <template is="dom-if" if="[[_isLastHourExists(oneHourStock)]]">
+	                      <div class="form-group">
+	                        <label for="name">Last OneHour Price: </label>
+	                        [[oneHourStock]]
+	                      </div>
+                      </template>
                       <div class="form-group">
-                        <label for="name">Last OneHour Price: </label>
-                        [[oneHourStock]]
-                      </div>
-                      <div class="form-group">
-                      <button class="btn btn-primary" on-click="getAnalytics">One Day Stocks</button>
+                      <button class="btn btn-danger" on-click="getAnalytics">One Day Stocks</button>
                       <button class="btn btn-danger" on-click="getLastHour">Last One Hour Stock</button>
-                      <button class="btn btn-success" on-click="buyStock">Buy stocks</button>
+                      <button class="btn btn-danger" on-click="buyStock">Buy stocks</button>
                       </div>
                     <div>
                     </vaadin-vertical-layout>
@@ -131,7 +163,16 @@ class StocksBkp extends PolymerElement{
         		on-error="handleError"
         		handle-as="json"
         		content-type="application/json"></iron-ajax>
-      `;
+            <iron-ajax
+        id="hourAnalytics"
+        method="[[method]]"
+        content-type="application/json"
+        on-response="handleAnalytics"
+        on-error="handleError"
+        handle-as="json"
+        loading="{{loadingData}}"
+        > </iron-ajax>
+     `;
     }
 }
 customElements.define('stocksbkp-app', StocksBkp);

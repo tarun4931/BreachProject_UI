@@ -81,8 +81,7 @@ _pageChanged(currentPage, oldPage) {
     }
   }	
 	_getStocksURL(){
-	    console.log(config.baseUrl + "/stocks");
-		return config.baseUrl + "/stocks";
+	    return config.baseUrl + "/stocks";
 	}
 	
 	getAllStocks(){
@@ -174,11 +173,11 @@ _pageChanged(currentPage, oldPage) {
                             <paper-item>
                                    <a href="#/reviewbkp" name="name">Review Orders</a>
                             </paper-item>
-                            <paper-item>
+                            <paper-item style="display:none;">
                                     <a href="#/buybkp" name="name">Place Order</a>
                             </paper-item>
                             <paper-item>
-                                    <a href="#/dayanalyticsbkp" name="name">Day History</a>
+                                    <a href="#/dayanalyticsbkp" name="name">Stock Analytics</a>
                             </paper-item>
                         </paper-listbox>
                     </app-header-layout>        
@@ -190,7 +189,7 @@ _pageChanged(currentPage, oldPage) {
                       <analytic-data name="analytics"></analytic-data>
 					  <reviewbkp-order name="reviewbkp" route="{{route}}"></reviewbkp-order> 
                       <placebkp-order name="buybkp" route="{{route}}"></placebkp-order> 
-                      <stocksbkp-app name="stocksbkp" allStocks="[[allStocks]]" route="{{route}}"></stocksbkp-app> 
+                      <stocksbkp-app name="stocksbkp" route="{{route}}"></stocksbkp-app> 
                       <analyticsbkp-app name="dayanalyticsbkp"></analyticsbkp-app>
                     </iron-pages>
             </app-drawer-layout>
